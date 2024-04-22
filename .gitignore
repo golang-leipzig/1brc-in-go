@@ -23,5 +23,4 @@ go.work
 measurements.txt
 measurements.txt.zst
 
-cpu.pprof
 fanx/fanx
