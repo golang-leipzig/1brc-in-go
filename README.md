@@ -123,7 +123,7 @@ them in less than 3 hours (162min).
 
 ## Implementations
 
-### Basic
+### Option: "basic"
 
 * just plain defaults, no optimization
 * requires linear memory in size of the data
@@ -137,3 +137,30 @@ user    4m21.518s
 sys     0m27.459s
 ```
 
+According to the official site, this somewhat matches the reference
+implementation (with 4m13s:
+[leaderboard](https://1brc.dev/#global-leaderboard)).
+
+### Option: "savemem"
+
+Compute metrics on the fly, constant memory usage. Since we do 1B comparisons
+(instead of just appends or writes to memory), we are actually slower (even
+though we have fewer allocations); around 9min.
+
+### Option: "fan-out-fan-in"
+
+Fan-out, fan-in pattern. Read 100K lines, pass to goroutine; e.g. 8 cores, can
+work on 8 batches at once. Expecting at most an 8x speedup (e.g. 9min to less
+than 2min).
+
+### Option: "scanner"
+
+* save allocs when reading the file, reuse buffer
+
+### Option: "noalloc"
+
+* todo: remove `TrimSpace`, `Split` and friends
+
+### Option: "mmap"
+
+* [why faster?](https://stackoverflow.com/questions/9817233/why-mmap-is-faster-than-sequential-io)
