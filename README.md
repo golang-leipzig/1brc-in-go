@@ -192,3 +192,10 @@ sys     0m14.308s
 ### Option: "mmap"
 
 * [why faster?](https://stackoverflow.com/questions/9817233/why-mmap-is-faster-than-sequential-io)
+
+### Option: "lean float"
+
+
+### Option: "faster float comp"
+
+
