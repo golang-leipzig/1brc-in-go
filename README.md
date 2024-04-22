@@ -120,3 +120,20 @@ sys     0m12.716s
 
 With the compressed baseline in 1TB you fould fit about 270B rows and process
 them in less than 3 hours (162min).
+
+## Implementations
+
+### Basic
+
+* just plain defaults, no optimization
+* requires linear memory in size of the data
+* no parallelism
+
+```
+$ time cat ../measurements.txt | go run main.go
+
+real    4m17.288s
+user    4m21.518s
+sys     0m27.459s
+```
+
