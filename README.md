@@ -117,3 +117,6 @@ real    0m36.750s
 user    0m32.334s
 sys     0m12.716s
 ```
+
+With the compressed baseline in 1TB you fould fit about 270B rows and process
+them in less than 3 hours (162min).
