@@ -147,6 +147,13 @@ Compute metrics on the fly, constant memory usage. Since we do 1B comparisons
 (instead of just appends or writes to memory), we are actually slower (even
 though we have fewer allocations); around 9min.
 
+```
+$ time cat ../measurements.txt | pv | go run main.go
+real    9m31.114s
+user    9m40.704s
+sys     1m26.789s
+```
+
 ### Option: "fan-out-fan-in"
 
 Fan-out, fan-in pattern. Read 100K lines, pass to goroutine; e.g. 8 cores, can
