@@ -158,7 +158,7 @@ sys     1m26.789s
 
 Fan-out, fan-in pattern. Read 100K lines, pass to goroutine; e.g. 8 cores, can
 work on 8 batches at once. Expecting at most an 8x speedup (e.g. 9min to less
-than 2min). Well, with batch size 20M we are down to 3:25.
+than 2min). Well, with batch size 20M we are down to 3:25 on an 8-core machine; we do not max out the cores.
 
 ```
 $ time cat ../measurements.txt | pv | go run main.go
@@ -166,6 +166,19 @@ $ time cat ../measurements.txt | pv | go run main.go
 real    3m25.233s
 user    12m53.138s
 sys     1m10.568s
+```
+
+On a i9-13900T we are down to 1:05:
+
+```
+$ time zstdcat -T0 ../measurements.txt.zst | pv | go run main.go
+...
+Ürümqi  -41.70/56.40/7.41
+İzmir   -33.10/73.30/17.91
+
+real    1m5.707s
+user    4m22.780s
+sys     0m14.308s
 ```
 
 ### Option: "scanner"
