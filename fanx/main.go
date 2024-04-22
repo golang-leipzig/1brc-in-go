@@ -9,11 +9,13 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"io"
 	"log"
 	"os"
 	"runtime"
+	"runtime/pprof"
 	"sort"
 	"strconv"
 	"strings"
@@ -99,7 +101,18 @@ func merger(data map[string]*Measurements, result chan map[string]*Measurements,
 	done <- true
 }
 
+var cpuprofile = flag.String("cpuprofile", "", "file to write cpu profile to")
+
 func main() {
+	flag.Parse()
+	if *cpuprofile != "" {
+		f, err := os.Create(*cpuprofile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		pprof.StartCPUProfile(f)
+		defer pprof.StopCPUProfile()
+	}
 	var (
 		batchSize = 20_000_000 //
 		queue     = make(chan []string)
