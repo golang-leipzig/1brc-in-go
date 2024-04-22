@@ -106,16 +106,53 @@ user    3m5.199s
 sys     0m17.257s
 ```
 
+Or:
+
+```
+$ zstdcat -T0 measurements.txt.zst | pv > /dev/null
+12.8GiB 0:00:32 [ 399MiB/s] [
+```
+
+Or, another data point (about 400M/s).
+
+```
+$ zstdcat -T0 measurements.txt.zst | pv > /dev/null
+12.8GiB 0:00:32 [ 399MiB/s]
+```
+
 Processing maxed out at about 350MB/s with compression.
 
 ```
 $ time zstdcat -T0 measurements.txt.zst | pv | cw -l
 12.8GiB 0:00:36 [ 358MiB/s] [
- 1000000000
+1000000000
 
 real    0m36.750s
 user    0m32.334s
 sys     0m12.716s
+```
+
+Indeed, with nvme (raid0) we can read the whole file sequentially at 4.5G/s (at
+100% cached).
+
+```
+$ time cat /var/data/tmp/measurements.txt | pv > /dev/null
+12.8GiB 0:00:02 [4.51GiB/s] [
+
+real    0m2.851s
+user    0m0.059s
+sys     0m3.204s
+```
+
+With cold cache, still 5s.
+
+```
+$ time cat /var/data/tmp/measurements.txt | pv > /dev/null
+12.8GiB 0:00:05 [2.49GiB/s] [                        <=>                                                                                                                                                                                      ]
+
+real    0m5.166s
+user    0m0.078s
+sys     0m5.419s
 ```
 
 With the compressed baseline in 1TB you fould fit about 270B rows and process
