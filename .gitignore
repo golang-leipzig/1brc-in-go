@@ -23,4 +23,7 @@ go.work
 measurements.txt
 measurements.txt.zst
 
-fanx/fanx
+/1brc-basic
+/1brc-fanout
+/1brc-savemem
+/1brc-scan

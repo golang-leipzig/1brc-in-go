@@ -1,3 +1,5 @@
+// Do not allocate a whole slice for keeping all measurements in memory.
+//
 // data:
 //
 // Tamale;27.5

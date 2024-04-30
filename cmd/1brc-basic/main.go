@@ -1,3 +1,5 @@
+// Keep all data in memory and perform stats on slice. Requires O(n) memory.
+//
 // data:
 //
 // Tamale;27.5
@@ -56,5 +58,4 @@ func main() {
 		avg := sum / float32(len(data[k]))
 		fmt.Printf("%s\t%0.2f/%0.2f/%0.2f\n", k, min, max, avg)
 	}
-
 }

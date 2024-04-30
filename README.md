@@ -56,6 +56,8 @@ $ stat --printf "%F %N %s\n" measurements.txt
 regular file 'measurements.txt' 13795406386
 ```
 
+About 13GB.
+
 ## Baselines
 
 About 10-20s to just iterate sequentually over the file, about 20% cached in
@@ -106,21 +108,14 @@ user    3m5.199s
 sys     0m17.257s
 ```
 
-Or:
+Reading compressed data; data point (about 400M/s).
 
 ```
 $ zstdcat -T0 measurements.txt.zst | pv > /dev/null
 12.8GiB 0:00:32 [ 399MiB/s] [
 ```
 
-Or, another data point (about 400M/s).
-
-```
-$ zstdcat -T0 measurements.txt.zst | pv > /dev/null
-12.8GiB 0:00:32 [ 399MiB/s]
-```
-
-Processing maxed out at about 350MB/s with compression.
+Processing maxes out at about 350MB/s with compression.
 
 ```
 $ time zstdcat -T0 measurements.txt.zst | pv | cw -l
@@ -132,8 +127,8 @@ user    0m32.334s
 sys     0m12.716s
 ```
 
-Indeed, with nvme (raid0) we can read the whole file sequentially at 4.5G/s (at
-100% cached).
+The above was all SATA SSD. With nvme drives (raid0) we can read the whole file
+sequentially at 4.5G/s (at 100% cached).
 
 ```
 $ time cat /var/data/tmp/measurements.txt | pv > /dev/null
@@ -155,8 +150,8 @@ user    0m0.078s
 sys     0m5.419s
 ```
 
-With the compressed baseline in 1TB you fould fit about 270B rows and process
-them in less than 3 hours (162min).
+With the compressed baseline 1TB of data would fit about 270B rows and process
+them in about 3 hours (162min).
 
 ## Implementations
 
@@ -185,11 +180,15 @@ Compute metrics on the fly, constant memory usage. Since we do 1B comparisons
 though we have fewer allocations); around 9min.
 
 ```
+$ cd savemem
 $ time cat ../measurements.txt | pv | go run main.go
 real    9m31.114s
 user    9m40.704s
 sys     1m26.789s
 ```
+
+Thesis: Instead of a memory write (as in the baseline) we have to do a read,
+compare and potential write operation. That may be roughly twice the work.
 
 ### Option: "fan-out-fan-in"
 
@@ -198,6 +197,7 @@ work on 8 batches at once. Expecting at most an 8x speedup (e.g. 9min to less
 than 2min). Well, with batch size 20M we are down to 3:25 on an 8-core machine; we do not max out the cores.
 
 ```
+$ cd fanx
 $ time cat ../measurements.txt | pv | go run main.go
 
 real    3m25.233s
@@ -205,7 +205,7 @@ user    12m53.138s
 sys     1m10.568s
 ```
 
-On a i9-13900T we are down to 1:05:
+On a 32-core i9-13900T we are down to 1:05:
 
 ```
 $ time zstdcat -T0 ../measurements.txt.zst | pv | go run main.go
@@ -231,7 +231,6 @@ sys     0m14.308s
 * [why faster?](https://stackoverflow.com/questions/9817233/why-mmap-is-faster-than-sequential-io)
 
 ### Option: "lean float"
-
 
 ### Option: "faster float comp"
 
