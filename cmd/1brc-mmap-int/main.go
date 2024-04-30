@@ -2,11 +2,13 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io"
 	"log"
 	"os"
 	"runtime"
+	"runtime/pprof"
 	"sort"
 	"sync"
 
@@ -14,7 +16,9 @@ import (
 	"golang.org/x/exp/mmap"
 )
 
-const chunkSize = 67108864
+var cpuprofile = flag.String("cpuprofile", "", "file to write cpu profile to")
+
+const chunkSize = 67108864 // 33554432 // 67108864
 
 // Measurements, as there is no need to keep all numbers around, we can compute
 // them on the fly.
@@ -130,9 +134,18 @@ func merger(data map[string]*Measurements, resultC chan map[string]*Measurements
 }
 
 func main() {
+	flag.Parse()
+	if *cpuprofile != "" {
+		f, err := os.Create(*cpuprofile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		pprof.StartCPUProfile(f)
+		defer pprof.StopCPUProfile()
+	}
 	fn := "measurements.txt"
-	if len(os.Args) > 1 {
-		fn = os.Args[1]
+	if flag.NArg() > 0 {
+		fn = flag.Arg(0)
 	}
 	r, err := mmap.Open(fn)
 	if err != nil {
