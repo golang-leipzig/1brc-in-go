@@ -197,7 +197,7 @@ sys     1m26.789s
 Thesis: Instead of a memory write (as in the baseline) we have to do a read,
 compare and potential write operation. That may be roughly twice the work.
 
-### Option: "fan-out-fan-in"
+### Option: "fan-out, fan-in"
 
 Fan-out, fan-in pattern. Read 100K lines, pass to goroutine; e.g. 8 cores, can
 work on 8 batches at once. Expecting at most an 8x speedup (e.g. 9min to less
@@ -297,3 +297,9 @@ real    0m17.723s
 user    2m10.490s
 sys     0m4.588s
 ```
+
+That's about 3x slower then the fastest JVM implementation. The code contains a
+nice comment section, with about 30 different ideas (and their impact):
+
+* [CalculateAverage_royvanrijn.java#L36-L67](https://github.com/gunnarmorling/1brc/blob/db064194be375edc02d6dbcd21268ad40f7e2869/src/main/java/dev/morling/onebrc/CalculateAverage_royvanrijn.java#L36-L67)
+
