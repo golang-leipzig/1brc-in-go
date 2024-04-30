@@ -81,6 +81,7 @@ func aggregate(rat io.ReaderAt, offset, length int, resultC chan map[string]*Mea
 			k = i
 		} else if buf[i] == '\n' {
 			l = i
+			// TODO: get rid of strings!
 			name := string(buf[j:k])
 			temp := ParseBestEffort(string(buf[k+1 : l]))
 			if _, ok := data[name]; !ok {
@@ -148,6 +149,7 @@ func main() {
 			break
 		}
 		for {
+			// TODO: maybe split this into goroutines as well
 			if r.At(j) == '\n' {
 				break // found newline
 			}

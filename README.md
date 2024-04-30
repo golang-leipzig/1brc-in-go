@@ -273,6 +273,17 @@ sys     0m6.745s
 
 On a 32-core machine we are down to real 0m6.684s.
 
+### Option: "use int, not float"
+
+You can manually parse a temp like '-16.7' into -167 and then back convert to float64 at output time.
+
+```
+$ cat measurements.txt | ./1brc-mmap-int
+real    0m41.618s
+user    4m53.000s
+sys     0m11.347s
+```
+
 ### Option: "faster float parse"
 
 * [fastfloat/parse.go#L203](https://github.com/valyala/fastjson/blob/6dae91c8e11a7fa6a257a550b75cba53ab81693e/fastfloat/parse.go#L203)
@@ -304,3 +315,6 @@ nice comment section, with about 30 different ideas (and their impact):
 
 * [CalculateAverage_royvanrijn.java#L36-L67](https://github.com/gunnarmorling/1brc/blob/db064194be375edc02d6dbcd21268ad40f7e2869/src/main/java/dev/morling/onebrc/CalculateAverage_royvanrijn.java#L36-L67)
 
+## TODO
+
+* [ ] profile guided optimization
