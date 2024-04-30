@@ -248,6 +248,8 @@ user    7m6.461s
 sys     0m47.624s
 ```
 
+On a 32-core CPU we reach 1m1.968s.
+
 ### Option: "mmap"
 
 * [why faster?](https://stackoverflow.com/questions/9817233/why-mmap-is-faster-than-sequential-io)
