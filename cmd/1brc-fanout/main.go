@@ -1,3 +1,5 @@
+// Basic parallel version, fan-out-fan-in pattern.
+//
 // data:
 //
 // Tamale;27.5
@@ -114,7 +116,7 @@ func main() {
 		defer pprof.StopCPUProfile()
 	}
 	var (
-		batchSize = 20_000_000 //
+		batchSize = 20_000_000
 		queue     = make(chan []string)
 		result    = make(chan map[string]*Measurements)
 		wg        sync.WaitGroup
