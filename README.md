@@ -253,6 +253,10 @@ On a 32-core CPU we reach 1m1.968s.
 ### Option: "mmap"
 
 * [why faster?](https://stackoverflow.com/questions/9817233/why-mmap-is-faster-than-sequential-io)
+* [How does mmap improve file reading speed?](https://stackoverflow.com/questions/37172740/how-does-mmap-improve-file-reading-speed)
+* [read line by line in the most efficient way *platform specific*](https://stackoverflow.com/questions/33616284/read-line-by-line-in-the-most-efficient-way-platform-specific/33620968#33620968)
+
+A pure, read-from-mmap iteration in 128MB chunks takes 11s. With 64MB chunks we are down to 5s.
 
 ### Option: "lean float"
 

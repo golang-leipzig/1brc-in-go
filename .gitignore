@@ -28,3 +28,4 @@ measurements.txt.zst
 /1brc-savemem
 /1brc-scan
 /1brc-scan-noalloc
+/1brc-mmap
