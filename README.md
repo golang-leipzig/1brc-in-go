@@ -265,8 +265,17 @@ user    5m31.853s
 sys     0m6.745s
 ```
 
-### Option: "lean float"
+On a 32-core machine we are down to real 0m6.684s.
 
 ### Option: "faster float comp"
 
+* [](https://github.com/valyala/fastjson/blob/6dae91c8e11a7fa6a257a550b75cba53ab81693e/fastfloat/parse.go#L203)
 
+
+```
+$ cat measurements.txt | ./1brc-mmap-float
+
+real    0m38.261s
+user    4m22.127s
+sys     0m10.156s
+```

@@ -6,6 +6,7 @@ TARGETS := \
 	1brc-scan \
 	1brc-scan-noalloc \
 	1brc-mmap \
+	1brc-mmap-float
 
 .PHONY: all
 all: $(TARGETS)
