@@ -241,6 +241,13 @@ On a 32-core CPU we reach 1m8.088s with this approach (independent of compressio
 * [x] fan-out fan-in
 * [x] fewer allocations
 
+```
+$ cat measurements.txt | ./1brc-scan-noalloc
+real    2m14.987s
+user    7m6.461s
+sys     0m47.624s
+```
+
 ### Option: "mmap"
 
 * [why faster?](https://stackoverflow.com/questions/9817233/why-mmap-is-faster-than-sequential-io)
