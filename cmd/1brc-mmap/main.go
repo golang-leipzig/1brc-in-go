@@ -55,6 +55,9 @@ func aggregate(rat io.ReaderAt, offset, length int, resultC chan map[string]*Mea
 	}
 	buf := make([]byte, length)
 	_, err := rat.ReadAt(buf, int64(offset))
+	if err == io.EOF {
+		return
+	}
 	if err != nil {
 		log.Fatal(err)
 	}
