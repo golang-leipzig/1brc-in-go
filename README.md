@@ -1,6 +1,10 @@
 # 1BRC in Go
 
-## Original Task
+> Lightning Talk at [Leipzig Gophers](https://golangleipzig.space)
+> [#42](https://golangleipzig.space/posts/meetup-42-invitation/), 2024-04-30
+> 1900, Leipzig
+
+## 1BRC: Original Task
 
 The One Billion Row Challenge (1BRC) is a fun exploration of how far modern
 Java can be pushed for aggregating one billion rows from a text file.  Grab all
@@ -97,6 +101,8 @@ real    0m9.961s
 user    0m1.449s
 sys     0m7.901s
 ```
+
+On a i9-13900T a plain `wc -l` takes 5.3s, and `cw -l` 2.8.
 
 Compressing data:
 
@@ -278,4 +284,16 @@ $ cat measurements.txt | ./1brc-mmap-float
 real    0m38.261s
 user    4m22.127s
 sys     0m10.156s
+```
+
+On a 32-core machine, we are down to 0m5.880s.
+
+On the reference CX33 machine:
+
+```
+$ cat measurements.txt | ./1brc-mmap-float
+
+real    0m17.723s
+user    2m10.490s
+sys     0m4.588s
 ```
