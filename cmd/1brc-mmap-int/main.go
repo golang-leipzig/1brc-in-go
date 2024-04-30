@@ -29,6 +29,7 @@ type Measurements struct {
 	Count int
 }
 
+// Add adds a new measurement, adjusting min and max as needed.
 func (m *Measurements) Add(v int) {
 	if v > m.Max {
 		m.Max = v
@@ -39,6 +40,7 @@ func (m *Measurements) Add(v int) {
 	m.Count++
 }
 
+// Merge merges data from another measurement.
 func (m *Measurements) Merge(o *Measurements) {
 	if o.Min < m.Min {
 		m.Min = o.Min
@@ -53,15 +55,18 @@ func (m *Measurements) Merge(o *Measurements) {
 // parseTempToInt turns '-16.7' into -167. It is up to the caller to take care
 // of the back conversion.
 func parseTempToInt(p []byte) int {
-	var result int
-	var pos = 1
+	var (
+		result int
+		pos    = 1 // exp
+		digit  byte
+	)
 	for i := len(p) - 1; i > -1; i-- {
 		if p[i] == '.' {
 			continue
 		} else if p[i] == '-' {
 			return -result
 		} else {
-			var digit = p[i] - '0'
+			digit = p[i] - '0'
 			result = result + int(digit)*pos
 			pos = 10 * pos
 		}
@@ -115,6 +120,8 @@ func aggregate(rat io.ReaderAt, offset, length int, resultC chan map[string]*Mea
 	<-sem
 }
 
+// merger merges all measurements from workers and merges them into a single
+// map.
 func merger(data map[string]*Measurements, resultC chan map[string]*Measurements, done chan bool) {
 	for m := range resultC {
 		for k, v := range m {
