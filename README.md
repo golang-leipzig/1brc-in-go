@@ -157,9 +157,9 @@ them in about 3 hours (162min).
 
 ### Option: "basic"
 
-* just plain defaults, no optimization
-* requires linear memory in size of the data
-* no parallelism
+* [x] just plain defaults, no optimization
+* [x] requires linear memory in size of the data
+* [x] no parallelism
 
 ```
 $ time cat measurements.txt | ./1brc-basic
@@ -179,6 +179,8 @@ Compute metrics on the fly, constant memory usage. Since we do 1B comparisons
 (instead of just appends or writes to memory), we are actually slower (even
 though we have fewer allocations); around 9min.
 
+* [x] struct, update after each line
+
 ```
 $ time cat measurements.txt | ./1brc-savemem
 real    9m31.114s
@@ -194,6 +196,9 @@ compare and potential write operation. That may be roughly twice the work.
 Fan-out, fan-in pattern. Read 100K lines, pass to goroutine; e.g. 8 cores, can
 work on 8 batches at once. Expecting at most an 8x speedup (e.g. 9min to less
 than 2min). Well, with batch size 20M we are down to 3:25 on an 8-core machine; we do not max out the cores.
+
+* [x] fan-out fan-in
+* [x] bufio.Reader.ReadString
 
 ```
 $ cat measurements.txt | ./1brc-fanout
@@ -218,8 +223,8 @@ sys     0m14.308s
 
 ### Option: "scanner"
 
-* save allocs when reading the file, reuse buffer
-* parallel processing
+* [x] scanner.Text, save allocs when reading the file, reuse buffer
+* [x] fan-out fan-in
 
 ```
 $ cat measurements.txt | ./1brc-scan
@@ -227,6 +232,10 @@ real    2m42.830s
 user    10m56.898s
 sys     1m0.452s
 ```
+
+On a 32-core CPU we reach 1m8.088s with this approach (independent of compression, SATA, nvme).
+
+
 
 ### Option: "noalloc"
 
