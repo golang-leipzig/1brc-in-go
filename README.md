@@ -275,8 +275,7 @@ On a 32-core machine we are down to real 0m6.684s.
 
 ### Option: "faster float comp"
 
-* [](https://github.com/valyala/fastjson/blob/6dae91c8e11a7fa6a257a550b75cba53ab81693e/fastfloat/parse.go#L203)
-
+* [fastfloat/parse.go#L203](https://github.com/valyala/fastjson/blob/6dae91c8e11a7fa6a257a550b75cba53ab81693e/fastfloat/parse.go#L203)
 
 ```
 $ cat measurements.txt | ./1brc-mmap-float
