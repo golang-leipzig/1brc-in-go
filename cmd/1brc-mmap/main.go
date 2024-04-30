@@ -1,11 +1,16 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"os"
+	"runtime"
+	"sort"
+	"strconv"
 	"sync"
 
+	"golang.org/x/exp/maps"
 	"golang.org/x/exp/mmap"
 )
 
@@ -55,44 +60,34 @@ func aggregate(rat io.ReaderAt, offset, length int, resultC chan map[string]*Mea
 	}
 	log.Println(offset, length)
 	var (
-		data = make(map[string]*Measurements)
-		j, o int
-		n    int
+		data    = make(map[string]*Measurements)
+		j, k, l = 0, 0, 0 // j=start, k=semi, l=newline
+		n       = 0
 	)
 	for i := 0; i < length; i++ {
-		if buf[i] == '\n' {
+		if buf[i] == ';' {
+			k = i
+		} else if buf[i] == '\n' {
+			l = i
+			name := string(buf[j:k])
+			temp, err := strconv.ParseFloat(string(buf[k+1:l]), 64)
+			if err != nil {
+				log.Fatal(err)
+			}
+			if _, ok := data[name]; !ok {
+				data[name] = &Measurements{
+					Min:   temp,
+					Max:   temp,
+					Sum:   temp,
+					Count: 1,
+				}
+			} else {
+				data[name].Add(temp)
+			}
+			j = l + 1
 			n++
 		}
 	}
-	for o <= length {
-		// j = bytes.Index(buf[o:], []byte{'\n'})
-		// log.Println(o, length)
-		// log.Println(string(buf[o : o+j]))
-		// i = bytes.Index(buf[o:], []byte{';'})
-		// j = bytes.Index(buf[o:], []byte{'\n'})
-		// name = string(buf[o : o+i])
-		// t = string(buf[o+i+1 : o+j])
-		// temp, err = strconv.ParseFloat(t, 64)
-		// if err != nil {
-		// 	log.Fatalf("invalid temp: %v", t)
-		// }
-		// if _, ok := data[name]; !ok {
-		// 	data[name] = &Measurements{
-		// 		Min:   temp,
-		// 		Max:   temp,
-		// 		Sum:   temp,
-		// 		Count: 1,
-		// 	}
-		// } else {
-		// 	data[name].Add(temp)
-		// }
-		// o = j + 1
-		// if j >= length {
-		// 	break
-		// }
-		o = o + j + 1
-	}
-	log.Printf("found %d lines", n)
 	resultC <- data
 	<-sem
 }
@@ -128,7 +123,7 @@ func main() {
 	var (
 		resultC = make(chan map[string]*Measurements)
 		done    = make(chan bool)
-		sem     = make(chan bool, 8)
+		sem     = make(chan bool, runtime.NumCPU())
 		wg      sync.WaitGroup
 		data    = make(map[string]*Measurements)
 	)
@@ -137,7 +132,10 @@ func main() {
 	for i < r.Len() {
 		j = i + chunkSize
 		if j > r.Len() {
-			// TODO: handle the last batch
+			L := j - i
+			wg.Add(1)
+			sem <- true
+			go aggregate(r, i, L, resultC, sem, &wg)
 			break
 		}
 		for {
@@ -155,4 +153,10 @@ func main() {
 	wg.Wait()
 	close(resultC)
 	<-done
+	keys := maps.Keys(data)
+	sort.Strings(keys)
+	for _, k := range keys {
+		avg := data[k].Sum / float64(data[k].Count)
+		fmt.Printf("%s\t%0.2f/%0.2f/%0.2f\n", k, data[k].Min, data[k].Max, avg)
+	}
 }
