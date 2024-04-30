@@ -273,7 +273,7 @@ sys     0m6.745s
 
 On a 32-core machine we are down to real 0m6.684s.
 
-### Option: "faster float comp"
+### Option: "faster float parse"
 
 * [fastfloat/parse.go#L203](https://github.com/valyala/fastjson/blob/6dae91c8e11a7fa6a257a550b75cba53ab81693e/fastfloat/parse.go#L203)
 
@@ -297,7 +297,9 @@ user    2m10.490s
 sys     0m4.588s
 ```
 
-That's about 3x slower then the fastest JVM implementation. The code contains a
+## Preliminary Summary
+
+"faster float" is about 3x slower then the fastest JVM implementation. The code contains a
 nice comment section, with about 30 different ideas (and their impact):
 
 * [CalculateAverage_royvanrijn.java#L36-L67](https://github.com/gunnarmorling/1brc/blob/db064194be375edc02d6dbcd21268ad40f7e2869/src/main/java/dev/morling/onebrc/CalculateAverage_royvanrijn.java#L36-L67)
