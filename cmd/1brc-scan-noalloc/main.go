@@ -1,4 +1,4 @@
-// TODO: scanner, and try to work with bytes only
+// TODO: use bufio.Scanner instead of br.ReadString // which allocates
 //
 // data:
 //
@@ -11,7 +11,6 @@ package main
 
 import (
 	"bufio"
-	"bytes"
 	"flag"
 	"fmt"
 	"log"
@@ -35,8 +34,6 @@ type Measurements struct {
 	Count int
 }
 
-var bSemi = []byte(";")
-
 func (m *Measurements) Add(v float64) {
 	if v > m.Max {
 		m.Max = v
@@ -58,21 +55,21 @@ func (m *Measurements) Merge(o *Measurements) {
 	m.Count = m.Count + o.Count
 }
 
-func worker(queue chan [][]byte, result chan map[string]*Measurements, wg *sync.WaitGroup) {
+func worker(queue chan []string, result chan map[string]*Measurements, wg *sync.WaitGroup) {
 	defer wg.Done()
 	var data = make(map[string]*Measurements)
+	var index int
 	for batch := range queue {
 		for _, line := range batch {
-			// find ";"
-			index := bytes.Index(line, bSemi)
+			index = strings.Index(line, ";")
 			if index == -1 {
-				log.Fatalf("expected a semicolor: %v", string(line))
+				log.Fatalf("expected a semicolon: %v", line)
 			}
-			temp, err := strconv.ParseFloat(strings.TrimSpace(string(line[index+1:])), 64)
+			name := strings.TrimSpace(line[:index])
+			temp, err := strconv.ParseFloat(strings.TrimSpace(line[index+1:]), 64)
 			if err != nil {
-				log.Fatalf("invalid temp: %f", string(line[index+1:]))
+				log.Fatalf("invalid temp: %f", line[index+1:])
 			}
-			name := string(line[:index])
 			if _, ok := data[name]; !ok {
 				data[name] = &Measurements{
 					Min:   temp,
@@ -120,7 +117,7 @@ func main() {
 	}
 	var (
 		batchSize = 20_000_000
-		queue     = make(chan [][]byte)
+		queue     = make(chan []string)
 		result    = make(chan map[string]*Measurements)
 		wg        sync.WaitGroup
 		done      = make(chan bool)
@@ -134,21 +131,23 @@ func main() {
 	go merger(data, result, done)
 	// start reading the file and fan out
 	scanner := bufio.NewScanner(os.Stdin)
-	batch := make([][]byte, batchSize)
+	batch := make([]string, 0)
 	i := 0
 	for scanner.Scan() {
-		line := scanner.Bytes()
-		copy(batch[i], line)
+		line := strings.TrimSpace(scanner.Text())
+		batch = append(batch, line)
 		i++
 		if i%batchSize == 0 {
-			queue <- batch
-			batch = make([][]byte, batchSize)
+			b := make([]string, len(batch))
+			copy(b, batch)
+			queue <- b
+			batch = nil
 		}
 	}
 	if scanner.Err() != nil {
 		log.Fatal(scanner.Err())
 	}
-	queue <- batch[:i] // rest, no copy required
+	queue <- batch // rest, no copy required
 	close(queue)
 	wg.Wait()
 	close(result)

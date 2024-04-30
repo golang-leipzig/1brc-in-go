@@ -235,11 +235,11 @@ sys     1m0.452s
 
 On a 32-core CPU we reach 1m8.088s with this approach (independent of compression, SATA, nvme).
 
-
-
 ### Option: "noalloc"
 
-* todo: remove `TrimSpace`, `Split` and friends
+* [x] scanner.Text, save allocs when reading the file, reuse buffer
+* [x] fan-out fan-in
+* [x] fewer allocations
 
 ### Option: "mmap"
 
