@@ -162,7 +162,7 @@ them in about 3 hours (162min).
 * no parallelism
 
 ```
-$ time cat ../measurements.txt | go run main.go
+$ time cat measurements.txt | ./1brc-basic
 
 real    4m17.288s
 user    4m21.518s
@@ -180,8 +180,7 @@ Compute metrics on the fly, constant memory usage. Since we do 1B comparisons
 though we have fewer allocations); around 9min.
 
 ```
-$ cd savemem
-$ time cat ../measurements.txt | pv | go run main.go
+$ time cat measurements.txt | ./1brc-savemem
 real    9m31.114s
 user    9m40.704s
 sys     1m26.789s
@@ -197,8 +196,7 @@ work on 8 batches at once. Expecting at most an 8x speedup (e.g. 9min to less
 than 2min). Well, with batch size 20M we are down to 3:25 on an 8-core machine; we do not max out the cores.
 
 ```
-$ cd fanx
-$ time cat ../measurements.txt | pv | go run main.go
+$ cat measurements.txt | ./1brc-fanout
 
 real    3m25.233s
 user    12m53.138s
@@ -208,7 +206,7 @@ sys     1m10.568s
 On a 32-core i9-13900T we are down to 1:05:
 
 ```
-$ time zstdcat -T0 ../measurements.txt.zst | pv | go run main.go
+$ time zstdcat -T0 measurements.txt.zst | pv | ./1brc-fanout
 ...
 Ürümqi  -41.70/56.40/7.41
 İzmir   -33.10/73.30/17.91
@@ -221,6 +219,14 @@ sys     0m14.308s
 ### Option: "scanner"
 
 * save allocs when reading the file, reuse buffer
+* parallel processing
+
+```
+$ cat measurements.txt | ./1brc-scan
+real    2m42.830s
+user    10m56.898s
+sys     1m0.452s
+```
 
 ### Option: "noalloc"
 

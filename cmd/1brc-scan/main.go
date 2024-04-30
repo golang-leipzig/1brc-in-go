@@ -13,7 +13,6 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
-	"io"
 	"log"
 	"os"
 	"runtime"
@@ -116,7 +115,7 @@ func main() {
 		defer pprof.StopCPUProfile()
 	}
 	var (
-		batchSize = 20_000_000 //
+		batchSize = 20_000_000
 		queue     = make(chan []string)
 		result    = make(chan map[string]*Measurements)
 		wg        sync.WaitGroup
@@ -130,18 +129,11 @@ func main() {
 	}
 	go merger(data, result, done)
 	// start reading the file and fan out
-	br := bufio.NewReader(os.Stdin)
+	scanner := bufio.NewScanner(os.Stdin)
 	batch := make([]string, 0)
 	i := 0
-	for {
-		line, err := br.ReadString('\n')
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			log.Fatal(err)
-		}
-		line = strings.TrimSpace(line)
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
 		batch = append(batch, line)
 		i++
 		if i%batchSize == 0 {
@@ -150,6 +142,9 @@ func main() {
 			queue <- b
 			batch = nil
 		}
+	}
+	if scanner.Err() != nil {
+		log.Fatal(scanner.Err())
 	}
 	queue <- batch // rest, no copy required
 	close(queue)
