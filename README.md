@@ -258,6 +258,13 @@ On a 32-core CPU we reach 1m1.968s.
 
 A pure, read-from-mmap iteration in 128MB chunks takes 11s. With 64MB chunks we are down to 5s.
 
+```
+$ cat measurements.txt | ./1brc-mmap
+real    0m45.136s
+user    5m31.853s
+sys     0m6.745s
+```
+
 ### Option: "lean float"
 
 ### Option: "faster float comp"
