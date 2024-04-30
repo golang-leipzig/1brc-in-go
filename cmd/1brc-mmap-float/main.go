@@ -70,7 +70,7 @@ func aggregate(rat io.ReaderAt, offset, length int, resultC chan map[string]*Mea
 	if err != nil {
 		log.Fatal(err)
 	}
-	// log.Println(offset, length)
+	log.Println(offset, length)
 	var (
 		data    = make(map[string]*Measurements)
 		j, k, l = 0, 0, 0 // j=start, k=semi, l=newline
