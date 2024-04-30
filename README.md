@@ -315,3 +315,6 @@ nice comment section, with about 30 different ideas (and their impact):
 
 * [CalculateAverage_royvanrijn.java#L36-L67](https://github.com/gunnarmorling/1brc/blob/db064194be375edc02d6dbcd21268ad40f7e2869/src/main/java/dev/morling/onebrc/CalculateAverage_royvanrijn.java#L36-L67)
 
+## TODO
+
+* [ ] profile guided optimization

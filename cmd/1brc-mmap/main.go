@@ -14,7 +14,7 @@ import (
 	"golang.org/x/exp/mmap"
 )
 
-const chunkSize = 67108864
+const chunkSize = 33554432 // 67108864
 
 // Measurements, as there is no need to keep all numbers around, we can compute
 // them on the fly.
