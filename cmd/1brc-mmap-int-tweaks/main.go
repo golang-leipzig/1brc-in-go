@@ -11,6 +11,7 @@ import (
 	"runtime/pprof"
 	"sort"
 	"sync"
+	"time"
 
 	"golang.org/x/exp/maps"
 	"golang.org/x/exp/mmap"
@@ -168,6 +169,7 @@ func main() {
 	)
 	go merger(data, resultC, done)
 	var i, j int // start and stop index
+	started := time.Now()
 	for i < r.Len() {
 		j = i + chunkSize
 		if j > r.Len() {
@@ -192,10 +194,12 @@ func main() {
 	wg.Wait()
 	close(resultC)
 	<-done
+	took := time.Since(started)
 	keys := maps.Keys(data)
 	sort.Strings(keys)
 	for _, k := range keys {
 		avg := (float64(data[k].Sum) / 10) / float64(data[k].Count)
 		fmt.Printf("%s\t%0.2f/%0.2f/%0.2f\n", k, float64(data[k].Min)/10, float64(data[k].Max)/10, avg)
 	}
+	log.Printf("agg: %v", took)
 }
