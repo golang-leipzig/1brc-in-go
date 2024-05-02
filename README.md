@@ -66,10 +66,10 @@ About 13GB.
 
 Best current times:
 
-* i7-7500U: 65s (14x slower, 224.00 GFLOP/s)
-* i7-8550U: 38s (8x slower, 512.00 GFLOP/s)
-* i9-13900T: 4.5s (3.35 TFLOP/s) (reference)
-* Intel Xeon Gold 6326: 4.3s (3.56TFLOP/s)
+* i7-7500U: 65s (~14x slower, 224.00 GFLOP/s)
+* i7-8550U: 37s (~8x slower, 512.00 GFLOP/s)
+* i9-13900T: 4.5s (3.35 TFLOP/s) (**reference**)
+* Intel Xeon Gold 6326: 4.3s (~1.04x faster, 3.56TFLOP/s)
 
 ## Baselines
 
