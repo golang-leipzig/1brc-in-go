@@ -18,7 +18,7 @@ import (
 
 var cpuprofile = flag.String("cpuprofile", "", "file to write cpu profile to")
 
-const chunkSize = 67108864 // 33554432 // 67108864
+const chunkSize = 8 * 1024 * 1024 // 67108864 // 33554432 // 67108864
 
 // Measurements, as there is no need to keep all numbers around, we can compute
 // them on the fly.
