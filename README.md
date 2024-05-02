@@ -62,6 +62,15 @@ regular file 'measurements.txt' 13795406386
 
 About 13GB.
 
+## TL;DR
+
+Best current times:
+
+* i7-7500U: 65s (14x slower, 224.00 GFLOP/s)
+* i7-8550U: 38s (8x slower, 512.00 GFLOP/s)
+* i9-13900T: 4.5s (3.35 TFLOP/s) (reference)
+* Intel Xeon Gold 6326: 4.3s (3.56TFLOP/s)
+
 ## Baselines
 
 About 10-20s to just iterate sequentually over the file, about 20% cached in
