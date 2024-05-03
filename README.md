@@ -84,6 +84,9 @@ Some current timings:
 
 ![](static/657582.gif)
 
+With a bit of cheating, using a custom-made collision free map, the reference
+machine takes 2.2s.
+
 ## Baselines
 
 About 10-20s to just iterate sequentually over the file, about 20% cached in
