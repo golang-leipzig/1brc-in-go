@@ -251,9 +251,8 @@ func main() {
 	// 	avg := (float64(data[k].Sum) / 10) / float64(data[k].Count)
 	// 	fmt.Printf("%s\t%0.2f/%0.2f/%0.2f\n", k, float64(data[k].Min)/10, float64(data[k].Max)/10, avg)
 	// }
-	// fmt.Printf("...\n")
-	// fmt.Printf("%d lines omitted (agg took: %v)", len(keys)-10, fmt.Sprintf(NoticeColor, took))
-	fmt.Printf("agg took: %v", fmt.Sprintf(NoticeColor, took))
+	fmt.Printf("...\n")
+	fmt.Printf("%d lines omitted (agg took: %v)", len(cities)-10, fmt.Sprintf(NoticeColor, took))
 	fmt.Println()
 }
 
