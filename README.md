@@ -11,6 +11,9 @@ but it is now a playground for various Go solutions to the
 [1BRC](https://1brc.dev). Feel free to submit a pull request of discuss
 optimizations and ideas in issues, etc.
 
+Note: A treasure trove of optimization approaches in various languages can be found
+in [various repos](https://github.com/topics/1brc).
+
 ## 1BRC: Original Task
 
 The [One Billion Row Challenge](https://1brc.dev) (1BRC) is a fun exploration
