@@ -79,7 +79,7 @@ Some current timings:
 * i9-13900T: 4.5s (3.35 TFLOP/s) (**reference**)
 * Intel Xeon Gold 6326: 4.3s (~1.04x faster, 3.56TFLOP/s)
 
-![](static/657580.gif)
+![](static/657582.gif)
 
 ## Baselines
 
