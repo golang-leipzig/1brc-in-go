@@ -243,7 +243,7 @@ func main() {
 	for _, c := range cities[:10] {
 		i := calculateIndex(c)
 		avg := (float64(data.M[i].Sum) / 10) / float64(data.M[i].Count)
-		fmt.Printf("%s\t%0.2f/%0.2f/%0.2f\n", i, float64(data.M[i].Min)/10, float64(data.M[i].Max)/10, avg)
+		fmt.Printf("%s\t%0.2f/%0.2f/%0.2f\n", c, float64(data.M[i].Min)/10, float64(data.M[i].Max)/10, avg)
 	}
 	// keys := maps.Keys(data)
 	// sort.Strings(keys)
