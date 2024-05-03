@@ -21,6 +21,14 @@ var cpuprofile = flag.String("cpuprofile", "", "file to write cpu profile to")
 
 const chunkSize = 8 * 1024 * 1024 // 67108864 // 33554432 // 67108864
 
+const (
+	InfoColor    = "\033[1;34m%s\033[0m"
+	NoticeColor  = "\033[1;36m%s\033[0m"
+	WarningColor = "\033[1;33m%s\033[0m"
+	ErrorColor   = "\033[1;31m%s\033[0m"
+	DebugColor   = "\033[0;36m%s\033[0m"
+)
+
 // Measurements, as there is no need to keep all numbers around, we can compute
 // them on the fly.
 type Measurements struct {
@@ -90,7 +98,8 @@ func aggregate(rat io.ReaderAt, offset, length int, resultC chan map[string]*Mea
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println(offset, length)
+	fmt.Printf(".")
+	// log.Println(offset, length)
 	var (
 		data    = make(map[string]*Measurements)
 		j, k, l = 0, 0, 0 // j=start, k=semi, l=newline
@@ -168,6 +177,7 @@ func main() {
 		data    = make(map[string]*Measurements)
 	)
 	go merger(data, resultC, done)
+	fmt.Printf("1BRC ⏩ ...")
 	var i, j int // start and stop index
 	started := time.Now()
 	for i < r.Len() {
@@ -194,12 +204,15 @@ func main() {
 	wg.Wait()
 	close(resultC)
 	<-done
+	fmt.Printf(" done ✅\n")
 	took := time.Since(started)
 	keys := maps.Keys(data)
 	sort.Strings(keys)
-	for _, k := range keys {
+	for _, k := range keys[:10] {
 		avg := (float64(data[k].Sum) / 10) / float64(data[k].Count)
 		fmt.Printf("%s\t%0.2f/%0.2f/%0.2f\n", k, float64(data[k].Min)/10, float64(data[k].Max)/10, avg)
 	}
-	log.Printf("agg: %v", took)
+	fmt.Printf("...\n")
+	fmt.Printf("%d lines omitted (agg took: %v)", len(keys)-10, fmt.Sprintf(NoticeColor, took))
+	fmt.Println()
 }
