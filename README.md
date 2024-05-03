@@ -333,6 +333,33 @@ user    2m10.490s
 sys     0m4.588s
 ```
 
+### Option: "static map"
+
+A pprof run showed, that map access was the most expensive part of the process.
+This is cheating, but to test the potential, we used a custom, collusion-free
+map. This halved the processing time (e.g. from 4.5s to 2.2s) - and still,
+"calculateIndex" would remain the most expensive part.
+
+```go
+// calculateIndex, interestingly the most expensive part of the program.
+func calculateIndex(s string) (index int) {
+	for i, c := range s {
+		index = index + i*(37+int(c))
+	}
+	return index % 16384
+}
+```
+
+Run (i9-13900T):
+
+```
+$ cat measurements.txt | ./1brc-mmap-int-static-map
+
+real    0m2.416s
+user    1m3.471s
+sys     0m1.439s
+```
+
 ## Preliminary Summary
 
 "faster float" is about 3x slower then the fastest JVM implementation. The code contains a
