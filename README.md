@@ -1,15 +1,23 @@
 # 1BRC in Go
 
+This started as a
+
 > Lightning Talk at [Leipzig Gophers](https://golangleipzig.space)
-> [#42](https://golangleipzig.space/posts/meetup-42-invitation/), 2024-04-30
-> 1900, Leipzig
+> [#42](https://golangleipzig.space/posts/meetup-42-invitation/), [Martin
+> Czygan](https://de.linkedin.com/in/martin-czygan-58348842), 2024-04-30 1900,
+> Leipzig
+
+but it is now a playground for various Go solutions to the
+[1BRC](https://1brc.dev). Feel free to submit a pull request of discuss
+optimizations and ideas in issues, etc.
 
 ## 1BRC: Original Task
 
-The One Billion Row Challenge (1BRC) is a fun exploration of how far modern
-Java can be pushed for aggregating one billion rows from a text file.  Grab all
-your (virtual) threads, reach out to SIMD, optimize your GC, or pull any other
-trick, and create the fastest implementation for solving this task!
+The [One Billion Row Challenge](https://1brc.dev) (1BRC) is a fun exploration
+of how far modern Java can be pushed for aggregating one billion rows from a
+text file.  Grab all your (virtual) threads, reach out to SIMD, optimize your
+GC, or pull any other trick, and create the fastest implementation for solving
+this task!
 
 The text file contains temperature values for a range of weather stations.
 Each row is one measurement in the format  <string: station name>;<double:
@@ -64,7 +72,7 @@ About 13GB.
 
 ## TL;DR
 
-Best current times:
+Some current timings:
 
 * i7-7500U: 65s (~14x slower, 224.00 GFLOP/s)
 * i7-8550U: 37s (~8x slower, 512.00 GFLOP/s)
@@ -74,7 +82,7 @@ Best current times:
 ## Baselines
 
 About 10-20s to just iterate sequentually over the file, about 20% cached in
-buffers.
+buffers. Using [pcstat](https://github.com/tobert/pcstat), and [cw](https://github.com/Freaky/cw).
 
 ```
 $ pcstat measurements.txt
@@ -111,7 +119,7 @@ user    0m1.449s
 sys     0m7.901s
 ```
 
-On a i9-13900T a plain `wc -l` takes 5.3s, and `cw -l` 2.8.
+On a [i9-13900T](https://www.intel.com/content/www/us/en/products/sku/230498/intel-core-i913900t-processor-36m-cache-up-to-5-30-ghz/specifications.html) a plain `wc -l` takes 5.3s, and `cw -l` 2.8.
 
 Compressing data:
 
@@ -327,3 +335,4 @@ nice comment section, with about 30 different ideas (and their impact):
 ## TODO
 
 * [ ] profile guided optimization
+
