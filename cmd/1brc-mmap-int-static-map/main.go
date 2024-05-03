@@ -41,6 +41,7 @@ func NewStaticMap() *StaticMap {
 	}
 }
 
+// calculateIndex, interestingly the most expensive part of the program.
 func calculateIndex(s string) (index int) {
 	for i, c := range s {
 		index = index + i*(37+int(c))
