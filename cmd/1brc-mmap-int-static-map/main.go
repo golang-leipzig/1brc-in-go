@@ -203,13 +203,11 @@ func main() {
 	}
 	defer r.Close()
 	var (
-		// resultC = make(chan map[string]*Measurements)
 		resultC = make(chan *StaticMap)
 		done    = make(chan bool)
 		sem     = make(chan bool, runtime.NumCPU())
 		wg      sync.WaitGroup
-		// data    = make(map[string]*Measurements)
-		data = NewStaticMap()
+		data    = NewStaticMap()
 	)
 	go merger(data, resultC, done)
 	fmt.Printf("1BRC ⏩ ...")
@@ -246,12 +244,6 @@ func main() {
 		avg := (float64(data.M[i].Sum) / 10) / float64(data.M[i].Count)
 		fmt.Printf("%s\t%0.2f/%0.2f/%0.2f\n", c, float64(data.M[i].Min)/10, float64(data.M[i].Max)/10, avg)
 	}
-	// keys := maps.Keys(data)
-	// sort.Strings(keys)
-	// for _, k := range keys[:10] {
-	// 	avg := (float64(data[k].Sum) / 10) / float64(data[k].Count)
-	// 	fmt.Printf("%s\t%0.2f/%0.2f/%0.2f\n", k, float64(data[k].Min)/10, float64(data[k].Max)/10, avg)
-	// }
 	fmt.Printf("...\n")
 	fmt.Printf("%d lines omitted (agg took: %v)", len(cities)-10, fmt.Sprintf(NoticeColor, took))
 	fmt.Println()
