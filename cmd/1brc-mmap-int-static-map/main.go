@@ -20,14 +20,9 @@ import (
 
 var cpuprofile = flag.String("cpuprofile", "", "file to write cpu profile to")
 
-const chunkSize = 8 * 1024 * 1024 // 67108864 // 33554432 // 67108864
-
 const (
-	InfoColor    = "\033[1;34m%s\033[0m"
-	NoticeColor  = "\033[1;36m%s\033[0m"
-	WarningColor = "\033[1;33m%s\033[0m"
-	ErrorColor   = "\033[1;31m%s\033[0m"
-	DebugColor   = "\033[0;36m%s\033[0m"
+	chunkSize   = 8 * 1024 * 1024 // per-thread file slice
+	noticeColor = "\033[1;36m%s\033[0m"
 )
 
 // StaticMap is a tailored "map" for cities.txt.
@@ -211,12 +206,12 @@ func main() {
 	)
 	go merger(data, resultC, done)
 	fmt.Printf("1BRC ⏩ ...")
-	var i, j int // start and stop index
+	var i, j, L int // start and stop index
 	started := time.Now()
 	for i < r.Len() {
 		j = i + chunkSize
 		if j > r.Len() {
-			L := j - i
+			L = j - i
 			wg.Add(1)
 			sem <- true
 			go aggregate(r, i, L, resultC, sem, &wg)
@@ -228,7 +223,7 @@ func main() {
 			}
 			j++
 		}
-		L := j - i
+		L = j - i
 		wg.Add(1)
 		sem <- true
 		go aggregate(r, i, L, resultC, sem, &wg)
@@ -245,7 +240,7 @@ func main() {
 		fmt.Printf("%s\t%0.2f/%0.2f/%0.2f\n", c, float64(data.M[i].Min)/10, float64(data.M[i].Max)/10, avg)
 	}
 	fmt.Printf("...\n")
-	fmt.Printf("%d lines omitted (agg took: %v)", len(cities)-10, fmt.Sprintf(NoticeColor, took))
+	fmt.Printf("%d lines omitted (agg took: %v)", len(cities)-10, fmt.Sprintf(noticeColor, took))
 	fmt.Println()
 }
 
