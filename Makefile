@@ -8,7 +8,8 @@ TARGETS := \
 	1brc-mmap \
 	1brc-mmap-float \
 	1brc-mmap-int \
-	1brc-mmap-int-tweaks
+	1brc-mmap-int-tweaks \
+	1brc-mmap-int-static-map
 
 .PHONY: all
 all: $(TARGETS)

@@ -84,6 +84,9 @@ Some current timings:
 
 ![](static/657582.gif)
 
+With a bit of cheating, using a custom-made collision free map, the reference
+machine takes 2.2s.
+
 ## Baselines
 
 About 10-20s to just iterate sequentually over the file, about 20% cached in
@@ -328,6 +331,33 @@ $ cat measurements.txt | ./1brc-mmap-float
 real    0m17.723s
 user    2m10.490s
 sys     0m4.588s
+```
+
+### Option: "static map"
+
+A pprof run showed, that map access was the most expensive part of the process.
+This is cheating, but to test the potential, we used a custom, collusion-free
+map. This halved the processing time (e.g. from 4.5s to 2.2s) - and still,
+"calculateIndex" would remain the most expensive part.
+
+```go
+// calculateIndex, interestingly the most expensive part of the program.
+func calculateIndex(s string) (index int) {
+	for i, c := range s {
+		index = index + i*(37+int(c))
+	}
+	return index % 16384
+}
+```
+
+Run (i9-13900T):
+
+```
+$ cat measurements.txt | ./1brc-mmap-int-static-map
+
+real    0m2.416s
+user    1m3.471s
+sys     0m1.439s
 ```
 
 ## Preliminary Summary
