@@ -341,3 +341,11 @@ nice comment section, with about 30 different ideas (and their impact):
 
 * [ ] profile guided optimization
 
+Using [gperf](https://www.gnu.org/software/gperf/) to find a perfect hash
+function, generate C, transpile to Go, with [ccgo](https://pkg.go.dev/modernc.org/ccgo/v4).
+
+```
+$ gperf cities.txt > perfect.c
+$ ccgo perfect.c # add #include <stddef.h>
+$ cat perfect.go
+```
