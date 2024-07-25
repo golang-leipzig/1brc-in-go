@@ -7,12 +7,12 @@ This started as a
 > Czygan](https://de.linkedin.com/in/martin-czygan-58348842), 2024-04-30 1900,
 > Leipzig
 
-but it is now a playground for various Go solutions to the
+but became a playground for various Go solutions to the
 [1BRC](https://1brc.dev). Feel free to submit a pull request of discuss
 optimizations and ideas in issues, etc.
 
-Note: A treasure trove of optimization approaches in various languages can be found
-in [various repos](https://github.com/topics/1brc).
+Note: A treasure trove of optimization approaches in different languages can be
+found in [various repos](https://github.com/topics/1brc).
 
 ## 1BRC: Original Task
 
@@ -336,7 +336,7 @@ sys     0m4.588s
 ### Option: "static map"
 
 A pprof run showed, that map access was the most expensive part of the process.
-This is cheating, but to test the potential, we used a custom, collusion-free
+This is cheating, but to test the potential, we used a custom, collision-free
 map. This halved the processing time (e.g. from 4.5s to 2.2s) - and still,
 "calculateIndex" would remain the most expensive part.
 
