@@ -81,6 +81,7 @@ Some current timings:
 * i7-8550U: 37s (~8x slower, 512.00 GFLOP/s)
 * i9-13900T: 4.5s (3.35 TFLOP/s) (**reference**)
 * Intel Xeon Gold 6326: 4.3s (~1.04x faster, 3.56TFLOP/s)
+* AMD E-350 (2011): 316s (~261x slower, 12.8 GFLOP/s)
 
 ![](static/657582.gif)
 
