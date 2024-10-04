@@ -77,10 +77,11 @@ About 13GB.
 
 Some current timings:
 
-* i7-7500U: 65s (~14x slower, 224.00 GFLOP/s)
-* i7-8550U: 37s (~8x slower, 512.00 GFLOP/s)
-* i9-13900T: 4.5s (3.35 TFLOP/s) (**reference**)
 * Intel Xeon Gold 6326: 4.3s (~1.04x faster, 3.56TFLOP/s)
+* i9-13900T: 4.5s (3.35 TFLOP/s) (**reference**)
+* i7-8550U: 37s (~8x slower, 512.00 GFLOP/s)
+* i7-7500U: 65s (~14x slower, 224.00 GFLOP/s)
+* Intel Core 2 Duo L9300 (2008): 275s (~261x slower, 12.8 GFLOP/s)
 * AMD E-350 (2011): 316s (~261x slower, 12.8 GFLOP/s)
 
 ![](static/657582.gif)
