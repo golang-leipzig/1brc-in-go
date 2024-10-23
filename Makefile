@@ -1,3 +1,4 @@
+MAKEFLAGS := --jobs=$(shell nproc)
 SHELL := /bin/bash
 TARGETS := \
 	1brc-basic \
